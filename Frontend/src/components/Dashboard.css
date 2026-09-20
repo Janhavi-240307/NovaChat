@@ -1,0 +1,170 @@
+.dash-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f4f5ff;
+  font-family: Arial, sans-serif;
+}
+
+/* ---------- Logo ---------- */
+
+.dash-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.dash-title {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dash-logo img {
+  position: absolute;
+  right: calc(50% + 90px);
+
+  width: 40px;
+  height: 40px;
+  padding: 5px;
+  object-fit: contain;
+  background-color: #252a4a;
+  border-radius: 50%;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dash-title h1 {
+  margin: 0;
+  font-size: 30px;
+  color: #171b32;
+}
+
+.dash-title p {
+  margin: 2px 0 0;
+  font-size: 14px;
+  color: #6b6f82;
+}
+
+/* ---------- Heading ---------- */
+
+.dash-heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.dash-heading h2 {
+  margin: 0 0 8px;
+  font-size: 28px;
+  color: #171b32;
+}
+
+.dash-heading p {
+  margin: 0;
+  font-size: 15px;
+  color: #6b6f82;
+}
+
+/* ---------- Cards ---------- */
+
+.dash-card {
+  display: flex;
+  gap: 25px;
+  width: 850px;
+}
+
+/* ---------- Common Card Styling ---------- */
+
+.chat-mode,
+.interview-mode {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 30px;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.chat-mode h2,
+.interview-mode h2 {
+  margin: 15px 0 10px;
+  font-size: 22px;
+  color: #171b32;
+}
+
+.chat-mode p,
+.interview-mode p {
+  margin: 0 auto;
+  max-width: 300px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #5f6375;
+}
+
+/* ---------- Chat Card ---------- */
+
+.chat-mode {
+  border: 1px solid #d9dbff;
+  background-color: #e8e9ff;
+}
+
+.chat-icon {
+  font-size: 48px;
+  color: #6366f1;
+}
+
+/* ---------- Interview Card ---------- */
+
+.interview-mode {
+  border: 1px solid #ffd6dc;
+  background-color: #fff1f1;
+}
+
+.interview-icon {
+  font-size: 48px;
+  color: #e85d75;
+}
+
+/* ---------- Buttons ---------- */
+
+.chat-mode button,
+.interview-mode button {
+  width: 100%;
+  margin-top: 25px;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.chat-mode button {
+  background-color: #6366f1;
+}
+
+.chat-mode button:hover {
+  background-color: #5558d9;
+}
+
+.interview-mode button {
+  background-color: #e85d75;
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.interview-mode button:hover {
+  background-color: #d94f67;
+}

@@ -1,0 +1,223 @@
+.chatWindow {
+  flex: 1;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.navbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 28px;
+  color: #171b32;
+  border-bottom: 1px solid #e5e5e5;
+  flex-shrink: 0;
+}
+
+.greeting h2 {
+  margin: 0;
+  font-size: 22px;
+  color: #171b32;
+}
+
+.greeting span {
+  display: block;
+  margin-top: 4px;
+  font-size: 14px;
+  color: #6b6f82;
+}
+
+.menu-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  color: #171b32;
+  cursor: pointer;
+  font-size: 18px;
+  margin-left: auto;
+}
+
+.menu-btn:hover {
+  background-color: rgba(23, 27, 50, 0.08);
+}
+
+/* ---------------- CHAT CONTENT ---------------- */
+
+.chat-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* ---------------- NEW CHAT ---------------- */
+
+.new-chat-window .chat-content {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+}
+
+.new-chat-window .new-chat {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  text-align: center;
+}
+
+.new-chat-window .new-chat h1 {
+  margin: 0;
+  font-size: 34px;
+  color: #171b32;
+}
+
+/* ---------------- LOADER ---------------- */
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ---------------- INPUT ---------------- */
+
+.chatInput {
+  padding: 20px 28px;
+  display: flex;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Input position on new chat */
+
+.new-chat-window .chatInput {
+  position: absolute;
+  top: 53%;
+  left: 50%;
+  width: 100%;
+  transform: translate(-50%, -50%);
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+
+/* ---------------- INPUT BOX ---------------- */
+
+.inputBox {
+  width: 100%;
+  max-width: 700px;
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  border: 1px solid #dcdde3;
+  border-radius: 24px;
+  background-color: #ffffff;
+}
+
+/* ---------------- ATTACH BUTTON ---------------- */
+
+.attach-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  color: #171b32;
+  cursor: pointer;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.attach-btn:hover {
+  background-color: rgba(23, 27, 50, 0.08);
+}
+
+/* ---------------- INPUT ---------------- */
+
+.inputBox input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 0 10px;
+  font-size: 15px;
+  background: transparent;
+  color: #171b32;
+  font-family: Arial, sans-serif !important;
+}
+
+.chat-menu {
+  position: absolute;
+  top: 65px;
+  right: 28px;
+  width: 180px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  padding: 8px;
+  background-color: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 16px;
+
+  box-shadow: 0 4px 16px rgba(23, 27, 50, 0.12);
+
+  z-index: 10;
+}
+
+.chat-menu button {
+  width: 100%;
+  padding: 11px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #171b32;
+  text-align: left;
+  cursor: pointer;
+}
+
+.chat-menu button:hover {
+  background-color: #f1f2f5;
+}
+
+.chat-menu button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+/* ---------------- SEND BUTTON ---------------- */
+
+.send-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  color: #ffffff;
+  background-color: #171b32;
+  cursor: pointer;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.send-btn:hover {
+  background-color: #252a4a;
+}

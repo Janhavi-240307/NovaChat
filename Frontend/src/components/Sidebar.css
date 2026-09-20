@@ -1,0 +1,152 @@
+.sidebar {
+  width: 300px;
+  height: 100vh;
+  background-color: #171b32;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+  font-size: 25px;
+}
+
+.sidebar-logo span {
+  color: #f4f5f7;
+}
+
+.sidebar-logo img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.new-chat-btn {
+  margin: 0px 18px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: #ffffff;
+  cursor: pointer;
+  background-color: #4f6ff5;
+  border-radius: 8px;
+  border: none;
+}
+
+/* .new-chat-btn:hover {
+  background-color: rgba(48, 54, 92, 0.8);
+} */
+
+.search-box {
+  margin: 12px 18px;
+  display: flex;
+  align-items: center;
+  background-color: #252a4a;
+  border-radius: 8px;
+  padding: 0 12px;
+}
+
+.search-box i {
+  color: #f4f5f7;
+}
+
+.search-box input {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: transparent;
+  color: #f4f5f7;
+  outline: none;
+}
+
+.search-box input::placeholder {
+  color: #a8b0d0;
+}
+
+button:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.history-sec {
+  margin: 0 18px;
+}
+
+.history-sec h3 {
+  margin: 15px 0 10px;
+  color: #f4f5f7;
+}
+
+.history-sec .history-chats {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.history-sec .history-chats li {
+  position: relative;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: #f4f5f7;
+  cursor: pointer;
+}
+
+.history-sec .history-chats li:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.profile-btn {
+  margin-top: auto;
+  padding: 10px 14px;
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(206, 213, 239, 0.08);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  cursor: pointer;
+  text-align: left;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #4f6ff5;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.user-name {
+  font-size: 15px;
+  color: #f4f5f7;
+}
+
+.fa-trash {
+  opacity: 0;
+  position: absolute;
+  right: 12px;
+}
+
+.history-sec .history-chats li:hover .fa-trash {
+  opacity: 1;
+}
+
+.fa-trash:hover {
+  color: #a8b0d0;
+}
+
+.highlighted {
+  background-color: rgba(180, 180, 180, 0.05);
+  border-radius: 10px;
+}

@@ -1,0 +1,44 @@
+.new-chat {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.chats {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+.user-div {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.user-msg {
+  background-color: #141622;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 14px;
+  margin: 0;
+  max-width: 500px;
+  width: fit-content;
+  font-size: 0.9rem;
+  overflow-wrap: break-word;
+}
+
+.nova-div {
+  display: block;
+  width: 100%;
+  margin-bottom: 20px;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.hljs {
+  border-radius: 15px !important;
+}
