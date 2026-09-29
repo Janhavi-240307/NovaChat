@@ -157,6 +157,14 @@
   font-family: Arial, sans-serif !important;
 }
 
+.chat-error {
+  color: #d9534f;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 8px;
+}
+
 .chat-menu {
   position: absolute;
   top: 65px;
@@ -175,6 +183,19 @@
   box-shadow: 0 4px 16px rgba(23, 27, 50, 0.12);
 
   z-index: 10;
+}
+.chat-menu input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  outline: none;
+  font-size: 15px;
+}
+
+.chat-menu input:focus {
+  border-color: #171b32;
 }
 
 .chat-menu button {

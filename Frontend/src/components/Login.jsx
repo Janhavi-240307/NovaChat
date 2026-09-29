@@ -2,7 +2,7 @@ import "./Login.css";
 import logo from "../assets/logo.png";
 import { useState } from "react";
 
-function Login({ onSignup, onLogin }) {
+function Login({ onSignup, onLogin, authMessage }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -33,6 +33,7 @@ function Login({ onSignup, onLogin }) {
 
             if (response.ok) {
                 console.log(res.message);
+                localStorage.setItem("token", res.token);
                 onLogin();
             } else {
                 setError(res.error);
@@ -65,6 +66,13 @@ function Login({ onSignup, onLogin }) {
                     <h2>Welcome back!</h2>
                     <p>Log in to continue to your NovaChat account.</p>
                 </div>
+
+                {authMessage && (
+                    <div className="auth-message">
+                        <i className="fa-solid fa-circle-exclamation"></i>
+                        <span>{authMessage}</span>
+                    </div>
+                )}
 
                 <form className="login-form" onSubmit={handleLogin}>
 

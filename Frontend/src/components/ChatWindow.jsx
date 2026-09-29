@@ -4,7 +4,7 @@ import { MyContext } from "./MyContext.jsx";
 import { useContext, useState, useEffect } from "react";
 import { PulseLoader } from "react-spinners";
 
-function ChatWindow() {
+function ChatWindow({ onLogout }) {
     const {
         prompt,
         setPrompt,
@@ -14,25 +14,41 @@ function ChatWindow() {
         prevChats,
         setPrevChats,
         setNewChat,
-        newChat
+        newChat,
+        allThreads,
+        setAllThreads
     } = useContext(MyContext);
 
     const [loading, setLoading] = useState(false);
+    const [lastPrompt, setLastPrompt] = useState("");
     const [menuOpen, setMenuOpen] = useState(false);
     const [renameMode, setRenameMode] = useState(false);
     const [chatName, setChatName] = useState("");
+    const [error, setError] = useState("");
+
 
     const getReply = async () => {
+        if (!prompt.trim() || loading) {
+            return;
+        }
+
+        const userMessage = prompt;
+        setError("");
+
+        setLastPrompt(userMessage);
+        setPrompt("");
+
         setLoading(true);
         setNewChat(false);
 
         const options = {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("token")}`
             },
             body: JSON.stringify({
-                message: prompt,
+                message: userMessage,
                 threadId: currThreadId
             })
         };
@@ -45,23 +61,117 @@ function ChatWindow() {
 
             const res = await response.json();
             console.log(res);
+
+            if (response.status === 401) {
+                onLogout("Your session has expired. Please log in again.");
+                return;
+            }
+
+            if (!response.ok) {
+                setError(res.error || "Something went wrong. Please try again.");
+                return;
+            }
+
             setReply(res.reply);
 
         } catch (err) {
             console.log(err);
+            setError("Unable to connect to the server.");
+        } finally {
+            setLoading(false);
         }
 
-        setLoading(false);
+
     };
+
+
+    const renameChat = async () => {
+        if (!chatName.trim()) {
+            return;
+        }
+
+        const options = {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("token")}`
+            },
+            body: JSON.stringify({
+                title: chatName
+            })
+        };
+
+        try {
+            const response = await fetch(
+                `http://localhost:8080/api/thread/${currThreadId}`,
+                options
+            );
+
+            const res = await response.json();
+            console.log(res);
+
+            if (response.status === 401) {
+                onLogout("Your session has expired. Please log in again.");
+                return;
+            }
+
+            if (response.ok) {
+
+                setAllThreads(prevThreads =>
+                    prevThreads.map(thread =>
+                        thread.threadId === currThreadId
+                            ? { ...thread, title: chatName }
+                            : thread
+                    )
+                );
+
+                setRenameMode(false);
+                setMenuOpen(false);
+            }
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const exportChat = () => {
+
+        const chatText = prevChats
+            .map(chat => {
+                return `${chat.role === "user" ? "You" : "NovaChat"}: ${chat.content}`;
+            })
+            .join("\n\n");
+
+        const blob = new Blob([chatText], {
+            type: "text/plain"
+        });
+
+        const url = URL.createObjectURL(blob);
+
+        const currentThread = allThreads.find(
+            thread => thread.threadId === currThreadId
+        );
+
+        const fileName = currentThread?.title || "NovaChat-chat";
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `${fileName}.txt`;
+
+        link.click();
+
+        URL.revokeObjectURL(url);
+    };
+
 
     // Append new chat to previous chats
     useEffect(() => {
-        if (prompt && reply) {
+        if (lastPrompt && reply) {
             setPrevChats(prevChats => [
                 ...prevChats,
                 {
                     role: "user",
-                    content: prompt
+                    content: lastPrompt
                 },
                 {
                     role: "assistant",
@@ -70,13 +180,14 @@ function ChatWindow() {
             ]);
         }
 
-        setPrompt("");
     }, [reply]);
+
 
     // Close menu when clicking outside
     useEffect(() => {
         const handleClickOutside = () => {
             setMenuOpen(false);
+            setRenameMode(false);
         };
 
         if (menuOpen) {
@@ -87,6 +198,7 @@ function ChatWindow() {
             document.removeEventListener("click", handleClickOutside);
         };
     }, [menuOpen]);
+
 
     return (
         <div className={`chatWindow ${newChat ? "new-chat-window" : ""}`}>
@@ -100,25 +212,9 @@ function ChatWindow() {
                     </div>
                 ) : (
                     <div className="chat-title">
-                        {chatName}
                     </div>
                 )}
 
-                {renameMode && (
-                    <div className="rename-box">
-                        <input
-                            type="text"
-                            value={chatName}
-                            onChange={(e) => setChatName(e.target.value)}
-                            placeholder="Enter chat name"
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter") {
-                                    setRenameMode(false);
-                                }
-                            }}
-                        />
-                    </div>
-                )}
 
                 {!newChat && (
                     <>
@@ -132,31 +228,63 @@ function ChatWindow() {
                             <i className="fa-solid fa-ellipsis-vertical"></i>
                         </button>
 
+
                         {menuOpen && (
                             <div
                                 className="chat-menu"
                                 onClick={(e) => e.stopPropagation()}
                             >
-                                <button
-                                    onClick={() => {
-                                        setRenameMode(true)
-                                        setMenuOpen(false)
-                                    }}
-                                >
-                                    <i className="fa-solid fa-pen"></i>
-                                    <span>Rename chat</span>
-                                </button>
 
-                                <button>
+                                {renameMode ? (
+
+                                    <input
+                                        type="text"
+                                        value={chatName}
+                                        onChange={(e) =>
+                                            setChatName(e.target.value)
+                                        }
+                                        autoFocus
+                                        placeholder="Enter chat name"
+                                        onKeyDown={(e) => {
+                                            if (e.key === "Enter") {
+                                                renameChat();
+                                            }
+                                        }}
+                                    />
+
+                                ) : (
+
+                                    <button
+                                        onClick={() => {
+                                            setChatName("");
+                                            setRenameMode(true);
+                                        }}
+                                    >
+                                        <i className="fa-solid fa-pen"></i>
+                                        <span>Rename chat</span>
+                                    </button>
+
+                                )}
+
+
+                                <button onClick={exportChat}>
                                     <i className="fa-solid fa-arrow-up-from-bracket"></i>
                                     <span>Export chat</span>
                                 </button>
+
                             </div>
                         )}
                     </>
                 )}
 
             </div>
+
+            {error && (
+                <div className="chat-error">
+                    {error}
+                </div>
+            )}
+
 
             {/* Scrollable chat area */}
             <div className="chat-content">
@@ -173,7 +301,9 @@ function ChatWindow() {
 
             </div>
 
+
             <div className="chatInput">
+
                 <div className="inputBox">
 
                     <button
@@ -182,6 +312,7 @@ function ChatWindow() {
                     >
                         <i className="fa-solid fa-paperclip"></i>
                     </button>
+
 
                     <input
                         type="text"
@@ -193,20 +324,24 @@ function ChatWindow() {
                                 getReply();
                             }
                         }}
+                        disabled={loading}
                     />
+
 
                     <button
                         type="button"
                         className="send-btn"
                         onClick={getReply}
+                        disabled={loading}
                     >
                         <i className="fa-solid fa-paper-plane"></i>
                     </button>
 
                 </div>
+
             </div>
 
-        </div >
+        </div>
     );
 }
 

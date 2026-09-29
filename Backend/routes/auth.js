@@ -1,6 +1,8 @@
 import express from "express";
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -46,8 +48,16 @@ router.post("/login", async (req, res) => {
         const isMatch = await bcrypt.compare(password, existingUser.password);
 
         if (isMatch) {
+            const token = jwt.sign(
+                { userId: existingUser._id },
+                process.env.JWT_SECRET,
+                { expiresIn: "7d" }
+            );
+
             return res.status(200).json({
-                message: "Login successful!"
+                message: "Login successful!",
+                token
+
             });
         }
 
@@ -58,6 +68,26 @@ router.post("/login", async (req, res) => {
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: "Something went wrong" })
+    }
+});
+
+router.get("/me", authMiddleware, async (req, res) => {
+    try {
+        const user = await User.findById(req.userId).select("name email");
+
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        res.json({
+            name: user.name,
+            email: user.email
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            error: "Failed to fetch user"
+        });
     }
 });
 

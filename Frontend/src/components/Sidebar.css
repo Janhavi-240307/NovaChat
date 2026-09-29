@@ -67,6 +67,12 @@
 .search-box input::placeholder {
   color: #a8b0d0;
 }
+.no-chats {
+  color: #a8b0d0;
+  font-size: 14px;
+  padding: 10px 12px;
+  margin: 0;
+}
 
 button:hover {
   background-color: rgba(255, 255, 255, 0.05);
@@ -100,7 +106,6 @@ button:hover {
 }
 
 .profile-btn {
-  margin-top: auto;
   padding: 10px 14px;
   background-color: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(206, 213, 239, 0.08);
@@ -149,4 +154,40 @@ button:hover {
 .highlighted {
   background-color: rgba(180, 180, 180, 0.05);
   border-radius: 10px;
+}
+
+.profile-section {
+  margin-top: auto;
+  position: relative;
+}
+
+.profile-menu {
+  position: absolute;
+  bottom: 65px;
+  left: 0;
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+
+  background-color: #252a4a;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+}
+
+.profile-menu button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.profile-menu button:hover {
+  background-color: rgba(255, 255, 255, 0.08);
 }
