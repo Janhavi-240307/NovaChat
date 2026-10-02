@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 8080;
 app.use(express.json());
 
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
+  origin: "https://nova-chat-chi-sandy.vercel.app",
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
