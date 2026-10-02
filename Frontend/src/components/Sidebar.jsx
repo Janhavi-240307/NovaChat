@@ -12,7 +12,7 @@ const getInitials = (name) => {
         .toUpperCase();
 };
 
-function Sidebar({ onLogout }) {
+function Sidebar({ onLogout, sidebarOpen, setSidebarOpen }) {
     const [profileOpen, setProfileOpen] = useState(false);
     const [search, setSearch] = useState("");
 
@@ -74,6 +74,7 @@ function Sidebar({ onLogout }) {
         setReply(null);
         setCurrThreadId(uuidv1());
         setPrevChats([]);
+        setSidebarOpen(false);
     };
 
 
@@ -81,6 +82,7 @@ function Sidebar({ onLogout }) {
     const changeThread = async (newThreadId) => {
         setCurrThreadId(newThreadId);
         setSearch("");
+        setSidebarOpen(false);
 
         try {
             const response = await fetch(
@@ -211,7 +213,16 @@ function Sidebar({ onLogout }) {
 
 
     return (
-        <section className="sidebar">
+        <section className={`sidebar ${sidebarOpen ? "open" : ""}`}>
+
+            {/* Mobile close button */}
+            <button
+                type="button"
+                className="close-sidebar-btn"
+                onClick={() => setSidebarOpen(false)}
+            >
+                <i className="fa-solid fa-x"></i>
+            </button>
 
             {/* Logo */}
             <div className="sidebar-logo">

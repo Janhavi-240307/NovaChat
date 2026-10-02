@@ -17,6 +17,7 @@ function App() {
   const [prevChats, setPrevChats] = useState([]);
   const [newChat, setNewChat] = useState(true);
   const [allThreads, setAllThreads] = useState([]);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const [screen, setScreen] = useState(() => {
     if (window.location.pathname.startsWith("/reset-password/")) {
@@ -220,10 +221,20 @@ function App() {
 
           <Sidebar
             onLogout={handleLogout}
+            sidebarOpen={sidebarOpen}
+            setSidebarOpen={setSidebarOpen}
           />
+
+          {sidebarOpen && (
+            <div
+              className="sidebar-overlay"
+              onClick={() => setSidebarOpen(false)}
+            ></div>
+          )}
 
           <ChatWindow
             onLogout={handleLogout}
+            setSidebarOpen={setSidebarOpen}
           />
 
         </MyContext.Provider>

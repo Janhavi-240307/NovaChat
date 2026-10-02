@@ -242,3 +242,55 @@
 .send-btn:hover {
   background-color: #252a4a;
 }
+
+/* ---------------- MOBILE SIDEBAR BUTTON ---------------- */
+
+.sidebar-toggle-btn {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .sidebar-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 40px;
+    height: 40px;
+
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+
+    color: #171b32;
+    font-size: 18px;
+    cursor: pointer;
+
+    flex-shrink: 0;
+  }
+
+  .sidebar-toggle-btn:hover {
+    background-color: rgba(23, 27, 50, 0.08);
+  }
+}
+
+/* ---------------- SMALL MOBILE ---------------- */
+
+@media (max-width: 430px) {
+  .new-chat-window .new-chat {
+    width: calc(100% - 32px);
+  }
+
+  .new-chat-window .new-chat h1 {
+    font-size: 28px;
+  }
+
+  .new-chat-window .chatInput {
+    width: calc(100% - 32px);
+    top: 57%;
+  }
+
+  .navbar {
+    padding: 14px 16px;
+  }
+}

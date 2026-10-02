@@ -4,7 +4,7 @@ import { MyContext } from "./MyContext.jsx";
 import { useContext, useState, useEffect } from "react";
 import { PulseLoader } from "react-spinners";
 
-function ChatWindow({ onLogout }) {
+function ChatWindow({ onLogout, setSidebarOpen }) {
     const {
         prompt,
         setPrompt,
@@ -290,12 +290,21 @@ function ChatWindow({ onLogout }) {
 
             <div className="navbar">
 
+                {/* Mobile sidebar button */}
+                <button
+                    type="button"
+                    className="sidebar-toggle-btn"
+                    onClick={() => setSidebarOpen(true)}
+                >
+                    <i className="fa-solid fa-bars"></i>
+                </button>
+
                 {newChat ? (
 
                     <div className="greeting">
 
                         <h2>
-                            Good evening, {userName}
+                            Welcome back, {userName?.split(" ")[0] || "there"}!
                         </h2>
 
                         <span>
