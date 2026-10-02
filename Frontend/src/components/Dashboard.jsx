@@ -1,7 +1,7 @@
 import "./Dashboard.css";
 import logo from "../assets/logo.png";
 
-function Dashboard({ onChat }) {
+function Dashboard({ onChat, userName }) {
     return (
         <div className="dash-page">
 
@@ -18,12 +18,13 @@ function Dashboard({ onChat }) {
                 </div>
             </div>
 
-
             <div className="dash-heading">
-                <h2>Welcome back, Janhavi!</h2>
-                <p>What would you like to do today?</p>
-            </div>
+                <h2>Welcome back, {userName || "there"}!</h2>
 
+                <p>
+                    What would you like to do today?
+                </p>
+            </div>
 
             <div className="dash-card">
 
@@ -38,12 +39,14 @@ function Dashboard({ onChat }) {
                         with NovaChat.
                     </p>
 
-                    <button type="button" onClick={onChat}>
+                    <button
+                        type="button"
+                        onClick={onChat}
+                    >
                         Start Chatting
                     </button>
 
                 </div>
-
 
                 <div className="interview-mode">
 
@@ -56,7 +59,10 @@ function Dashboard({ onChat }) {
                         your skills.
                     </p>
 
-                    <button type="button" disabled>
+                    <button
+                        type="button"
+                        disabled
+                    >
                         Coming Soon
                     </button>
 

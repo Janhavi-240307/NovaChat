@@ -18,7 +18,6 @@ function App() {
   const [newChat, setNewChat] = useState(true);
   const [allThreads, setAllThreads] = useState([]);
 
-
   const [screen, setScreen] = useState(() => {
     if (window.location.pathname.startsWith("/reset-password/")) {
       return "reset-password";
@@ -31,12 +30,15 @@ function App() {
 
   // Message shown on Login screen when authentication fails
   const [authMessage, setAuthMessage] = useState("");
+
+  // Logged-in user's name
   const [userName, setUserName] = useState("");
 
   // Logout user
   const handleLogout = (message = "") => {
     localStorage.removeItem("token");
     setAuthMessage(message);
+    setUserName("");
     setScreen("login");
   };
 
@@ -67,10 +69,12 @@ function App() {
   useEffect(() => {
     const verifyToken = async () => {
 
+      // Reset password page does not require login
       if (window.location.pathname.startsWith("/reset-password/")) {
         setCheckingAuth(false);
         return;
       }
+
       const token = localStorage.getItem("token");
 
       // No token → go to Login
@@ -91,8 +95,14 @@ function App() {
         );
 
         if (response.ok) {
+          const data = await response.json();
+
+          // Store logged-in user's name
+          setUserName(data.name);
+
           // Token is valid
           setScreen("dashboard");
+
         } else {
           // Token is invalid or expired
           localStorage.removeItem("token");
@@ -129,9 +139,32 @@ function App() {
       <Login
         onSignup={() => setScreen("signup")}
 
-        onLogin={() => {
+        onLogin={async () => {
           // Remove old authentication message
           setAuthMessage("");
+
+          const token = localStorage.getItem("token");
+
+          try {
+            const response = await fetch(
+              "http://localhost:8080/api/auth/me",
+              {
+                headers: {
+                  "Authorization": `Bearer ${token}`
+                }
+              }
+            );
+
+            const data = await response.json();
+
+            if (response.ok) {
+              setUserName(data.name);
+            }
+
+          } catch (err) {
+            console.log(err);
+          }
+
           setScreen("dashboard");
         }}
 
@@ -174,6 +207,7 @@ function App() {
     return (
       <Dashboard
         onChat={() => setScreen("chat")}
+        userName={userName}
       />
     );
   }
