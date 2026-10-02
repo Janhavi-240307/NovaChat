@@ -2,7 +2,7 @@ import "./Login.css";
 import logo from "../assets/logo.png";
 import { useState } from "react";
 
-function Login({ onSignup, onLogin, authMessage }) {
+function Login({ onSignup, onLogin, onForgotPassword, authMessage }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -93,7 +93,9 @@ function Login({ onSignup, onLogin, authMessage }) {
                     />
 
                     <div className="forgot-password">
-                        <span>Forgot password?</span>
+                        <button type="button" onClick={onForgotPassword}>
+                            Forgot Password
+                        </button>
                     </div>
 
                     {error && <p className="login-error">{error}</p>}

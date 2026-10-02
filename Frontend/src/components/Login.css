@@ -33,7 +33,6 @@
 .login-logo img {
   position: absolute;
   right: calc(50% + 90px);
-
   width: 40px;
   height: 40px;
   padding: 5px;
@@ -126,24 +125,27 @@
 .forgot-password {
   display: flex;
   justify-content: flex-end;
-  margin-top: 2px;
+  margin: 8px 0 20px;
 }
 
-.forgot-password span {
+.forgot-password button {
+  background: none;
+  border: none;
+  padding: 0;
   font-family: Arial, sans-serif;
   font-size: 13px;
   color: #5d6aa5;
   cursor: pointer;
 }
 
-.forgot-password span:hover {
+.forgot-password button:hover {
   color: #252a4a;
   text-decoration: underline;
 }
 
 /* ---------- Login Button ---------- */
 
-.login-form button {
+.login-form > button {
   margin-top: 10px;
   padding: 12px;
   border: none;
@@ -156,7 +158,7 @@
   cursor: pointer;
 }
 
-.login-form button:hover {
+.login-form > button:hover {
   background-color: #252a4a;
 }
 
@@ -190,12 +192,16 @@
   text-decoration: underline;
 }
 
+/* ---------- Login Error ---------- */
+
 .login-error {
   margin: 0;
   color: #d94f67;
   font-size: 14px;
   text-align: center;
 }
+
+/* ---------- Authentication Message ---------- */
 
 .auth-message {
   display: flex;

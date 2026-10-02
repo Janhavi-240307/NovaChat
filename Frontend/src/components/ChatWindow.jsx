@@ -16,7 +16,8 @@ function ChatWindow({ onLogout }) {
         setNewChat,
         newChat,
         allThreads,
-        setAllThreads
+        setAllThreads,
+        userName
     } = useContext(MyContext);
 
     const [loading, setLoading] = useState(false);
@@ -33,8 +34,8 @@ function ChatWindow({ onLogout }) {
         }
 
         const userMessage = prompt;
-        setError("");
 
+        setError("");
         setLastPrompt(userMessage);
         setPrompt("");
 
@@ -43,10 +44,12 @@ function ChatWindow({ onLogout }) {
 
         const options = {
             method: "POST",
+
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${localStorage.getItem("token")}`
             },
+
             body: JSON.stringify({
                 message: userMessage,
                 threadId: currThreadId
@@ -60,28 +63,65 @@ function ChatWindow({ onLogout }) {
             );
 
             const res = await response.json();
+
             console.log(res);
 
+
             if (response.status === 401) {
-                onLogout("Your session has expired. Please log in again.");
+                onLogout(
+                    "Your session has expired. Please log in again."
+                );
+
                 return;
             }
 
+
             if (!response.ok) {
-                setError(res.error || "Something went wrong. Please try again.");
+                setError(
+                    res.error ||
+                    "Something went wrong. Please try again."
+                );
+
                 return;
             }
+
+
+            // Add new chat to Recents
+            setAllThreads(prevThreads => {
+
+                const exists = prevThreads.some(
+                    thread => thread.threadId === currThreadId
+                );
+
+                if (exists) {
+                    return prevThreads;
+                }
+
+                return [
+                    {
+                        threadId: currThreadId,
+
+                        // Use generated title from backend
+                        title: res.title
+                    },
+
+                    ...prevThreads
+                ];
+            });
+
 
             setReply(res.reply);
 
         } catch (err) {
             console.log(err);
-            setError("Unable to connect to the server.");
+
+            setError(
+                "Unable to connect to the server."
+            );
+
         } finally {
             setLoading(false);
         }
-
-
     };
 
 
@@ -92,10 +132,12 @@ function ChatWindow({ onLogout }) {
 
         const options = {
             method: "PUT",
+
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${localStorage.getItem("token")}`
             },
+
             body: JSON.stringify({
                 title: chatName
             })
@@ -108,19 +150,28 @@ function ChatWindow({ onLogout }) {
             );
 
             const res = await response.json();
+
             console.log(res);
 
+
             if (response.status === 401) {
-                onLogout("Your session has expired. Please log in again.");
+                onLogout(
+                    "Your session has expired. Please log in again."
+                );
+
                 return;
             }
+
 
             if (response.ok) {
 
                 setAllThreads(prevThreads =>
                     prevThreads.map(thread =>
                         thread.threadId === currThreadId
-                            ? { ...thread, title: chatName }
+                            ? {
+                                ...thread,
+                                title: chatName
+                            }
                             : thread
                     )
                 );
@@ -134,31 +185,48 @@ function ChatWindow({ onLogout }) {
         }
     };
 
+
     const exportChat = () => {
 
         const chatText = prevChats
             .map(chat => {
-                return `${chat.role === "user" ? "You" : "NovaChat"}: ${chat.content}`;
+                return `${chat.role === "user"
+                    ? "You"
+                    : "NovaChat"}: ${chat.content}`;
             })
             .join("\n\n");
 
-        const blob = new Blob([chatText], {
-            type: "text/plain"
-        });
+
+        const blob = new Blob(
+            [chatText],
+            {
+                type: "text/plain"
+            }
+        );
+
 
         const url = URL.createObjectURL(blob);
+
 
         const currentThread = allThreads.find(
             thread => thread.threadId === currThreadId
         );
 
-        const fileName = currentThread?.title || "NovaChat-chat";
+
+        const fileName =
+            currentThread?.title ||
+            "NovaChat-chat";
+
 
         const link = document.createElement("a");
+
         link.href = url;
-        link.download = `${fileName}.txt`;
+
+        link.download =
+            `${fileName}.txt`;
 
         link.click();
+
 
         URL.revokeObjectURL(url);
     };
@@ -166,13 +234,17 @@ function ChatWindow({ onLogout }) {
 
     // Append new chat to previous chats
     useEffect(() => {
+
         if (lastPrompt && reply) {
+
             setPrevChats(prevChats => [
                 ...prevChats,
+
                 {
                     role: "user",
                     content: lastPrompt
                 },
+
                 {
                     role: "assistant",
                     content: reply
@@ -185,54 +257,86 @@ function ChatWindow({ onLogout }) {
 
     // Close menu when clicking outside
     useEffect(() => {
+
         const handleClickOutside = () => {
             setMenuOpen(false);
             setRenameMode(false);
         };
 
+
         if (menuOpen) {
-            document.addEventListener("click", handleClickOutside);
+            document.addEventListener(
+                "click",
+                handleClickOutside
+            );
         }
 
+
         return () => {
-            document.removeEventListener("click", handleClickOutside);
+            document.removeEventListener(
+                "click",
+                handleClickOutside
+            );
         };
+
     }, [menuOpen]);
 
 
     return (
-        <div className={`chatWindow ${newChat ? "new-chat-window" : ""}`}>
+        <div
+            className={`chatWindow ${newChat ? "new-chat-window" : ""
+                }`}
+        >
 
             <div className="navbar">
 
                 {newChat ? (
+
                     <div className="greeting">
-                        <h2>Good evening, Janhavi</h2>
-                        <span>Ready to chat?</span>
+
+                        <h2>
+                            Good evening, {userName}
+                        </h2>
+
+                        <span>
+                            Ready to chat?
+                        </span>
+
                     </div>
+
                 ) : (
-                    <div className="chat-title">
-                    </div>
+
+                    <div className="chat-title"></div>
+
                 )}
 
 
                 {!newChat && (
+
                     <>
+
                         <button
                             className="menu-btn"
+
                             onClick={(e) => {
                                 e.stopPropagation();
                                 setMenuOpen(!menuOpen);
                             }}
                         >
+
                             <i className="fa-solid fa-ellipsis-vertical"></i>
+
                         </button>
 
 
                         {menuOpen && (
+
                             <div
                                 className="chat-menu"
-                                onClick={(e) => e.stopPropagation()}
+
+                                onClick={(e) =>
+                                    e.stopPropagation()
+                                }
                             >
 
                                 {renameMode ? (
@@ -240,13 +344,21 @@ function ChatWindow({ onLogout }) {
                                     <input
                                         type="text"
                                         value={chatName}
+
                                         onChange={(e) =>
-                                            setChatName(e.target.value)
+                                            setChatName(
+                                                e.target.value
+                                            )
                                         }
+
                                         autoFocus
+
                                         placeholder="Enter chat name"
+
                                         onKeyDown={(e) => {
-                                            if (e.key === "Enter") {
+                                            if (
+                                                e.key === "Enter"
+                                            ) {
                                                 renameChat();
                                             }
                                         }}
@@ -260,43 +372,63 @@ function ChatWindow({ onLogout }) {
                                             setRenameMode(true);
                                         }}
                                     >
+
                                         <i className="fa-solid fa-pen"></i>
-                                        <span>Rename chat</span>
+
+                                        <span>
+                                            Rename chat
+                                        </span>
+
                                     </button>
 
                                 )}
 
 
-                                <button onClick={exportChat}>
+                                <button
+                                    onClick={exportChat}
+                                >
+
                                     <i className="fa-solid fa-arrow-up-from-bracket"></i>
-                                    <span>Export chat</span>
+
+                                    <span>
+                                        Export chat
+                                    </span>
+
                                 </button>
 
                             </div>
+
                         )}
+
                     </>
+
                 )}
 
             </div>
 
+
             {error && (
+
                 <div className="chat-error">
                     {error}
                 </div>
+
             )}
 
 
-            {/* Scrollable chat area */}
             <div className="chat-content">
 
                 <Chat />
 
+
                 <div className="loader">
+
                     <PulseLoader
                         color="#171b32"
                         loading={loading}
                         size={8}
                     />
+
                 </div>
 
             </div>
@@ -310,7 +442,9 @@ function ChatWindow({ onLogout }) {
                         type="button"
                         className="attach-btn"
                     >
+
                         <i className="fa-solid fa-paperclip"></i>
+
                     </button>
 
 
@@ -318,12 +452,19 @@ function ChatWindow({ onLogout }) {
                         type="text"
                         placeholder="Ask Anything"
                         value={prompt}
-                        onChange={(e) => setPrompt(e.target.value)}
+
+                        onChange={(e) =>
+                            setPrompt(e.target.value)
+                        }
+
                         onKeyDown={(e) => {
+
                             if (e.key === "Enter") {
                                 getReply();
                             }
+
                         }}
+
                         disabled={loading}
                     />
 
@@ -334,7 +475,9 @@ function ChatWindow({ onLogout }) {
                         onClick={getReply}
                         disabled={loading}
                     >
+
                         <i className="fa-solid fa-paper-plane"></i>
+
                     </button>
 
                 </div>

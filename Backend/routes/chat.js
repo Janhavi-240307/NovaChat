@@ -5,69 +5,118 @@ import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
+const generateTitle = (message) => {
+  const words = message.trim().split(/\s+/);
+
+  if (words.length <= 4) {
+    return message.trim();
+  }
+
+  return words.slice(0, 4).join(" ") + "...";
+};
+
 
 // Get all threads
 router.get("/thread", authMiddleware, async (req, res) => {
   try {
     const threads = await Thread.find({ userId: req.userId }).sort({ updatedAt: -1 });
-    //most recent data on top
+    // most recent data on top
     res.json(threads);
+
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: "Failed to fetch threads" });
+    res.status(500).json({
+      error: "Failed to fetch threads"
+    });
   }
 });
 
+
+// Get messages of a particular thread
 router.get("/thread/:threadId", authMiddleware, async (req, res) => {
   const { threadId } = req.params;
+
   try {
-    const thread = await Thread.findOne({ threadId, userId: req.userId });
+    const thread = await Thread.findOne({
+      threadId,
+      userId: req.userId
+    });
+
     if (!thread) {
-      return res.status(400).json({ error: "Thread not found!" });
+      return res.status(400).json({
+        error: "Thread not found!"
+      });
     }
+
     res.json(thread.messages);
+
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: "Failed to fetch threads" });
+    res.status(500).json({
+      error: "Failed to fetch threads"
+    });
   }
 });
 
+
+// Delete a thread
 router.delete("/thread/:threadId", authMiddleware, async (req, res) => {
   const { threadId } = req.params;
+
   try {
-    const deletedThread = await Thread.findOneAndDelete({ threadId, userId: req.userId });
+    const deletedThread = await Thread.findOneAndDelete({
+      threadId,
+      userId: req.userId
+    });
 
     if (!deletedThread) {
-      return res.status(400).json({ error: "Thread not found!" });
+      return res.status(400).json({
+        error: "Thread not found!"
+      });
     }
-    res.status(200).json({ success: "Thread deleted successfully!" });
+
+    res.status(200).json({
+      success: "Thread deleted successfully!"
+    });
+
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: "Failed to delete thread" });
+    res.status(500).json({
+      error: "Failed to delete thread"
+    });
   }
 });
 
+
+// Rename a thread
 router.put("/thread/:threadId", authMiddleware, async (req, res) => {
   const { threadId } = req.params;
   const { title } = req.body;
 
   if (!title) {
-    return res.status(400).json({ error: "Chat name is required!" });
+    return res.status(400).json({
+      error: "Chat name is required!"
+    });
   }
 
   try {
-
     const thread = await Thread.findOneAndUpdate(
       {
         threadId,
         userId: req.userId
       },
-      { title: title },
-      { new: true }
+      {
+        title: title
+      },
+      {
+        new: true
+      }
     );
 
     if (!thread) {
-      return res.status(404).json({ error: "Thread not found!" });
+      return res.status(404).json({
+        error: "Thread not found!"
+      });
     }
 
     res.json({
@@ -77,39 +126,73 @@ router.put("/thread/:threadId", authMiddleware, async (req, res) => {
 
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: "Failed to rename chat" });
+    res.status(500).json({
+      error: "Failed to rename chat"
+    });
   }
-})
+});
 
+
+// Send message to ChatGPT
 router.post("/chat", authMiddleware, async (req, res) => {
   const { threadId, message } = req.body;
 
   if (!threadId || !message) {
-    return res.status(400).json({ error: "Missing required fields" });
+    return res.status(400).json({
+      error: "Missing required fields"
+    });
   }
 
   try {
-    let thread = await Thread.findOne({ threadId, userId: req.userId });
+    let thread = await Thread.findOne({
+      threadId,
+      userId: req.userId
+    });
 
     if (!thread) {
       thread = new Thread({
         threadId,
         userId: req.userId,
-        title: message,
-        messages: [{ role: "user", content: message }],
+        title: generateTitle(message),
+        messages: [
+          {
+            role: "user",
+            content: message
+          }
+        ],
       });
+
     } else {
-      thread.messages.push({ role: "user", content: message });
+      thread.messages.push({
+        role: "user",
+        content: message
+      });
     }
 
-    const assistantReply = await getOpenAIAPIResponse(message);
-    thread.messages.push({ role: "assistant", content: assistantReply });
+    const assistantReply = await getOpenAIAPIResponse(thread.messages);
+
+    thread.messages.push({
+      role: "assistant",
+      content: assistantReply
+    });
+
     thread.updatedAt = new Date();
+
     await thread.save();
-    res.json({ reply: assistantReply });
+
+    res.json({
+      reply: assistantReply,
+      title: thread.title
+    });
+
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: "Something went wrong" });
+    console.log("Chat Error:", err);
+
+    res.status(500).json({
+      error: err.message || "Something went wrong"
+    });
   }
 });
+
+
 export default router;

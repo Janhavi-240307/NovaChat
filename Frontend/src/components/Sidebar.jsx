@@ -14,7 +14,6 @@ const getInitials = (name) => {
 
 function Sidebar({ onLogout }) {
     const [profileOpen, setProfileOpen] = useState(false);
-    const [userName, setUserName] = useState("");
     const [search, setSearch] = useState("");
 
     const {
@@ -25,7 +24,9 @@ function Sidebar({ onLogout }) {
         setPrompt,
         setReply,
         setCurrThreadId,
-        setPrevChats
+        setPrevChats,
+        setUserName,
+        userName
     } = useContext(MyContext);
 
     // Get all chats
@@ -309,13 +310,12 @@ function Sidebar({ onLogout }) {
 
                     <div className="profile-menu">
 
-                        <button onClick={onLogout}>
+                        <button onClick={() => onLogout()}>
                             <i className="fa-solid fa-right-from-bracket"></i>
                             <span>Logout</span>
                         </button>
 
                     </div>
-
                 )}
 
 

@@ -7,6 +7,8 @@ import { v1 as uuidv1 } from "uuid";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
+import ForgotPassword from "./components/ForgotPassword";
+import ResetPassword from "./components/ResetPassword";
 
 function App() {
   const [prompt, setPrompt] = useState("");
@@ -16,14 +18,20 @@ function App() {
   const [newChat, setNewChat] = useState(true);
   const [allThreads, setAllThreads] = useState([]);
 
-  const [screen, setScreen] = useState(
-    localStorage.getItem("token") ? "dashboard" : "login"
-  );
+
+  const [screen, setScreen] = useState(() => {
+    if (window.location.pathname.startsWith("/reset-password/")) {
+      return "reset-password";
+    }
+
+    return localStorage.getItem("token") ? "dashboard" : "login";
+  });
 
   const [checkingAuth, setCheckingAuth] = useState(true);
 
   // Message shown on Login screen when authentication fails
   const [authMessage, setAuthMessage] = useState("");
+  const [userName, setUserName] = useState("");
 
   // Logout user
   const handleLogout = (message = "") => {
@@ -49,12 +57,20 @@ function App() {
     setPrevChats,
 
     allThreads,
-    setAllThreads
+    setAllThreads,
+
+    userName,
+    setUserName
   };
 
   // Verify token when application starts
   useEffect(() => {
     const verifyToken = async () => {
+
+      if (window.location.pathname.startsWith("/reset-password/")) {
+        setCheckingAuth(false);
+        return;
+      }
       const token = localStorage.getItem("token");
 
       // No token → go to Login
@@ -119,6 +135,8 @@ function App() {
           setScreen("dashboard");
         }}
 
+        onForgotPassword={() => setScreen("forgot-password")}
+
         authMessage={authMessage}
       />
     );
@@ -129,6 +147,24 @@ function App() {
     return (
       <Signup
         onLogin={() => setScreen("login")}
+      />
+    );
+  }
+
+  // Forgot Password screen
+  if (screen === "forgot-password") {
+    return (
+      <ForgotPassword
+        onBackToLogin={() => setScreen("login")}
+      />
+    );
+  }
+
+  // Reset Password screen
+  if (screen === "reset-password") {
+    return (
+      <ResetPassword
+        onBackToLogin={() => setScreen("login")}
       />
     );
   }
