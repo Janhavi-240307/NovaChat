@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./ResetPassword.css";
+import API_URL from "../api";
 
 function ResetPassword({ onBackToLogin }) {
     const token = window.location.pathname.split("/")[2];
@@ -25,7 +26,7 @@ function ResetPassword({ onBackToLogin }) {
 
         try {
             const response = await fetch(
-                `http://localhost:8080/api/auth/reset-password/${token}`,
+                `${API_URL}/api/auth/reset-password/${token}`,
                 {
                     method: "POST",
                     headers: {

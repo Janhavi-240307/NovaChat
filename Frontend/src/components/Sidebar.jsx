@@ -3,6 +3,7 @@ import logo from "../assets/logo.png";
 import { useContext, useEffect, useState } from "react";
 import { MyContext } from "./MyContext";
 import { v1 as uuidv1 } from "uuid";
+import API_URL from "../api";
 
 const getInitials = (name) => {
     return name
@@ -33,7 +34,7 @@ function Sidebar({ onLogout, sidebarOpen, setSidebarOpen }) {
     const getAllThreads = async () => {
         try {
             const response = await fetch(
-                "http://localhost:8080/api/thread",
+                `${API_URL}/api/thread`,
                 {
                     headers: {
                         "Authorization": `Bearer ${localStorage.getItem("token")}`
@@ -86,7 +87,7 @@ function Sidebar({ onLogout, sidebarOpen, setSidebarOpen }) {
 
         try {
             const response = await fetch(
-                `http://localhost:8080/api/thread/${newThreadId}`,
+                `${API_URL}/api/thread/${newThreadId}`,
                 {
                     headers: {
                         "Authorization": `Bearer ${localStorage.getItem("token")}`
@@ -117,7 +118,7 @@ function Sidebar({ onLogout, sidebarOpen, setSidebarOpen }) {
     const deleteThread = async (threadId) => {
         try {
             const response = await fetch(
-                `http://localhost:8080/api/thread/${threadId}`,
+                `${API_URL}/api/thread/${threadId}`,
                 {
                     method: "DELETE",
                     headers: {
@@ -175,7 +176,7 @@ function Sidebar({ onLogout, sidebarOpen, setSidebarOpen }) {
     const getUser = async () => {
         try {
             const response = await fetch(
-                "http://localhost:8080/api/auth/me",
+                `${API_URL}/api/auth/me`,
                 {
                     headers: {
                         "Authorization": `Bearer ${localStorage.getItem("token")}`

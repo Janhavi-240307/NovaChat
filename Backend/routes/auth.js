@@ -6,7 +6,6 @@ import authMiddleware from "../middleware/authMiddleware.js";
 import crypto from "crypto";
 import transporter from "../utils/mailer.js";
 
-
 const router = express.Router();
 
 
@@ -38,6 +37,7 @@ router.post("/signup", async (req, res) => {
 
     } catch (err) {
         console.log(err);
+
         res.status(500).json({
             error: "Something went wrong"
         });
@@ -116,7 +116,8 @@ router.post("/forgot-password", async (req, res) => {
 
         await user.save();
 
-        const resetLink = `http://localhost:5173/reset-password/${resetToken}`;
+        const resetLink =
+            `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
 
         await transporter.sendMail({
             from: process.env.EMAIL_USER,

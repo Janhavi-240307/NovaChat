@@ -1,6 +1,7 @@
 import "./Login.css";
 import logo from "../assets/logo.png";
 import { useState } from "react";
+import API_URL from "../api";
 
 function Login({ onSignup, onLogin, onForgotPassword, authMessage }) {
     const [email, setEmail] = useState("");
@@ -25,7 +26,7 @@ function Login({ onSignup, onLogin, onForgotPassword, authMessage }) {
 
         try {
             const response = await fetch(
-                "http://localhost:8080/api/auth/login",
+                `${API_URL}/api/auth/login`,
                 options
             );
 
@@ -42,8 +43,7 @@ function Login({ onSignup, onLogin, onForgotPassword, authMessage }) {
         } catch (err) {
             console.log(err);
         }
-
-    }
+    };
 
     return (
         <div className="login-page">
@@ -60,7 +60,6 @@ function Login({ onSignup, onLogin, onForgotPassword, authMessage }) {
                         </div>
                     </div>
                 </div>
-
 
                 <div className="login-heading">
                     <h2>Welcome back!</h2>
@@ -93,12 +92,19 @@ function Login({ onSignup, onLogin, onForgotPassword, authMessage }) {
                     />
 
                     <div className="forgot-password">
-                        <button type="button" onClick={onForgotPassword}>
+                        <button
+                            type="button"
+                            onClick={onForgotPassword}
+                        >
                             Forgot Password
                         </button>
                     </div>
 
-                    {error && <p className="login-error">{error}</p>}
+                    {error && (
+                        <p className="login-error">
+                            {error}
+                        </p>
+                    )}
 
                     <button type="submit">
                         Login
@@ -108,7 +114,12 @@ function Login({ onSignup, onLogin, onForgotPassword, authMessage }) {
 
                 <div className="signup-link">
                     <span>Don't have an account?</span>
-                    <button type="button" onClick={onSignup}>Sign up</button>
+                    <button
+                        type="button"
+                        onClick={onSignup}
+                    >
+                        Sign up
+                    </button>
                 </div>
 
             </div>

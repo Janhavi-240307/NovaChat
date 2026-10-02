@@ -9,6 +9,7 @@ import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
+import API_URL from "./api";
 
 function App() {
   const [prompt, setPrompt] = useState("");
@@ -29,13 +30,10 @@ function App() {
 
   const [checkingAuth, setCheckingAuth] = useState(true);
 
-  // Message shown on Login screen when authentication fails
   const [authMessage, setAuthMessage] = useState("");
 
-  // Logged-in user's name
   const [userName, setUserName] = useState("");
 
-  // Logout user
   const handleLogout = (message = "") => {
     localStorage.removeItem("token");
     setAuthMessage(message);
@@ -66,11 +64,9 @@ function App() {
     setUserName
   };
 
-  // Verify token when application starts
   useEffect(() => {
     const verifyToken = async () => {
 
-      // Reset password page does not require login
       if (window.location.pathname.startsWith("/reset-password/")) {
         setCheckingAuth(false);
         return;
@@ -78,7 +74,6 @@ function App() {
 
       const token = localStorage.getItem("token");
 
-      // No token → go to Login
       if (!token) {
         setScreen("login");
         setCheckingAuth(false);
@@ -87,7 +82,7 @@ function App() {
 
       try {
         const response = await fetch(
-          "http://localhost:8080/api/auth/me",
+          `${API_URL}/api/auth/me`,
           {
             headers: {
               "Authorization": `Bearer ${token}`
@@ -98,14 +93,11 @@ function App() {
         if (response.ok) {
           const data = await response.json();
 
-          // Store logged-in user's name
           setUserName(data.name);
 
-          // Token is valid
           setScreen("dashboard");
 
         } else {
-          // Token is invalid or expired
           localStorage.removeItem("token");
 
           if (response.status === 401) {
@@ -129,26 +121,23 @@ function App() {
 
   }, []);
 
-  // Don't show Login/Dashboard until token verification is finished
   if (checkingAuth) {
     return <div>Loading...</div>;
   }
 
-  // Login screen
   if (screen === "login") {
     return (
       <Login
         onSignup={() => setScreen("signup")}
 
         onLogin={async () => {
-          // Remove old authentication message
           setAuthMessage("");
 
           const token = localStorage.getItem("token");
 
           try {
             const response = await fetch(
-              "http://localhost:8080/api/auth/me",
+              `${API_URL}/api/auth/me`,
               {
                 headers: {
                   "Authorization": `Bearer ${token}`
@@ -176,7 +165,6 @@ function App() {
     );
   }
 
-  // Signup screen
   if (screen === "signup") {
     return (
       <Signup
@@ -185,7 +173,6 @@ function App() {
     );
   }
 
-  // Forgot Password screen
   if (screen === "forgot-password") {
     return (
       <ForgotPassword
@@ -194,7 +181,6 @@ function App() {
     );
   }
 
-  // Reset Password screen
   if (screen === "reset-password") {
     return (
       <ResetPassword
@@ -203,7 +189,6 @@ function App() {
     );
   }
 
-  // Dashboard screen
   if (screen === "dashboard") {
     return (
       <Dashboard
@@ -213,7 +198,6 @@ function App() {
     );
   }
 
-  // Chat screen
   if (screen === "chat") {
     return (
       <div className="app">

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./ForgotPassword.css";
+import API_URL from "../api";
 
 function ForgotPassword({ onBackToLogin }) {
     const [email, setEmail] = useState("");
@@ -16,7 +17,7 @@ function ForgotPassword({ onBackToLogin }) {
 
         try {
             const response = await fetch(
-                "http://localhost:8080/api/auth/forgot-password",
+                `${API_URL}/api/auth/forgot-password`,
                 {
                     method: "POST",
                     headers: {

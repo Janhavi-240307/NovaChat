@@ -3,6 +3,7 @@ import Chat from "./Chat.jsx";
 import { MyContext } from "./MyContext.jsx";
 import { useContext, useState, useEffect } from "react";
 import { PulseLoader } from "react-spinners";
+import API_URL from "../api";
 
 function ChatWindow({ onLogout, setSidebarOpen }) {
     const {
@@ -58,7 +59,7 @@ function ChatWindow({ onLogout, setSidebarOpen }) {
 
         try {
             const response = await fetch(
-                "http://localhost:8080/api/chat",
+                `${API_URL}/api/chat`,
                 options
             );
 
@@ -145,7 +146,7 @@ function ChatWindow({ onLogout, setSidebarOpen }) {
 
         try {
             const response = await fetch(
-                `http://localhost:8080/api/thread/${currThreadId}`,
+                `${API_URL}/api/thread/${currThreadId}`,
                 options
             );
 
@@ -298,6 +299,7 @@ function ChatWindow({ onLogout, setSidebarOpen }) {
                 >
                     <i className="fa-solid fa-bars"></i>
                 </button>
+
 
                 {newChat ? (
 

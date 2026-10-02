@@ -1,6 +1,7 @@
 import "./Signup.css";
 import logo from "../assets/logo.png";
 import { useState } from "react";
+import API_URL from "../api";
 
 function Signup({ onLogin }) {
     const [name, setName] = useState("");
@@ -8,7 +9,6 @@ function Signup({ onLogin }) {
     const [password, setPassword] = useState("");
     const [confirmPass, setConfirmPass] = useState("");
     const [error, setError] = useState("");
-
 
     const handleSignup = async (e) => {
         e.preventDefault();
@@ -34,7 +34,7 @@ function Signup({ onLogin }) {
 
         try {
             const response = await fetch(
-                "http://localhost:8080/api/auth/signup",
+                `${API_URL}/api/auth/signup`,
                 options
             );
 
@@ -67,7 +67,6 @@ function Signup({ onLogin }) {
                         </div>
                     </div>
                 </div>
-
 
                 <div className="signup-heading">
                     <h2>Create your account</h2>
@@ -112,8 +111,11 @@ function Signup({ onLogin }) {
                         <span>Forgot password?</span>
                     </div>
 
-
-                    {error && <p className="signup-error">{error}</p>}
+                    {error && (
+                        <p className="signup-error">
+                            {error}
+                        </p>
+                    )}
 
                     <button type="submit">
                         Signup
@@ -123,7 +125,12 @@ function Signup({ onLogin }) {
 
                 <div className="login-link">
                     <span>Already have an account?</span>
-                    <button type="button" onClick={onLogin}>Login</button>
+                    <button
+                        type="button"
+                        onClick={onLogin}
+                    >
+                        Login
+                    </button>
                 </div>
 
             </div>
