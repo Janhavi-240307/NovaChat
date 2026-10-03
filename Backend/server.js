@@ -13,7 +13,10 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "https://nova-chat-chi-sandy.vercel.app",
+    origin: [
+      "https://nova-chat-chi-sandy.vercel.app",
+      "https://nova-chat-git-main-janhavi-dev.vercel.app"
+    ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
