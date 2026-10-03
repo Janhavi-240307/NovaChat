@@ -8,59 +8,56 @@ import authRoutes from "./routes/auth.js";
 const app = express();
 const PORT = process.env.PORT || 8080;
 
+// CORS configuration
+const allowedOrigins = [
+  "https://nova-chat-chi-sandy.vercel.app",
+  "http://localhost:5173",
+  "http://localhost:3000",
+];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+
+
+app.options("*", cors(corsOptions));
+
+
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use(cors({
-  origin: "https://nova-chat-chi-sandy.vercel.app",
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
-
+// 4. API Routes
 app.use("/api", chatRoutes);
 app.use("/api/auth", authRoutes);
 
-app.listen(PORT, () => {
-  console.log(`server running on ${PORT}`);
-  connectDB();
+
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "OK", message: "Server is healthy" });
 });
 
+// Database connection
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MongoDB_URI);
-
     console.log("Connected with Database!");
   } catch (err) {
-    console.log("Failed to connect with Db", err);
+    console.error("Failed to connect with DB:", err.message);
   }
 };
 
-// app.post("/test", async (req, res) => {
-//   const options = {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//       Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-//     },
-//     body: JSON.stringify({
-//       model: "gpt-4o-mini",
-//       messages: [
-//         {
-//           role: "user",
-//           content: req.body.message,
-//         },
-//       ],
-//     }),
-//   };
-
-//   try {
-//     const response = await fetch(
-//       "https://api.openai.com/v1/chat/completions",
-//       options,
-//     );
-//     const data = await response.json();
-//     console.log(data.choices[0].message.content);
-//     res.send(data.choices[0].message.content);
-//   } catch (err) {
-//     console.log(err);
-//   }
-// });
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+  connectDB();
+});
