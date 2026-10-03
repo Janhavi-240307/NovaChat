@@ -168,3 +168,84 @@
 .interview-mode button:hover {
   background-color: #d94f67;
 }
+
+/* ---------- Mobile Responsive ---------- */
+
+@media (max-width: 700px) {
+  .dash-page {
+    min-height: 100vh;
+    padding: 40px 20px;
+    justify-content: center;
+    overflow-x: hidden;
+  }
+
+  .dash-logo {
+    margin-bottom: 20px;
+  }
+
+  .dash-title {
+    width: 100%;
+  }
+
+  .dash-logo img {
+    position: static;
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+  }
+
+  .brand-text {
+    align-items: flex-start;
+  }
+
+  .dash-title h1 {
+    font-size: 28px;
+  }
+
+  .dash-title p {
+    font-size: 13px;
+  }
+
+  .dash-heading {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 25px;
+  }
+
+  .dash-heading h2 {
+    font-size: 24px;
+  }
+
+  .dash-heading p {
+    font-size: 14px;
+  }
+
+  .dash-card {
+    width: 100%;
+    max-width: 450px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .chat-mode,
+  .interview-mode {
+    width: 100%;
+    padding: 25px 20px;
+  }
+
+  .chat-mode h2,
+  .interview-mode h2 {
+    font-size: 20px;
+  }
+
+  .chat-mode p,
+  .interview-mode p {
+    max-width: 100%;
+  }
+
+  .chat-mode button,
+  .interview-mode button {
+    width: 100%;
+  }
+}
