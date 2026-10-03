@@ -1,48 +1,51 @@
 # NovaChat
 
-NovaChat is a full-stack AI chat application inspired by modern conversational AI platforms. It enables users to securely create, manage, and search conversations while interacting with an AI assistant powered by the OpenAI API.
+NovaChat is a full-stack AI chat application inspired by modern conversational AI platforms. It allows users to create, manage, and search conversations while interacting with an AI assistant powered by the OpenAI API.
 
 ## Live Demo
 
 https://nova-chat-chi-sandy.vercel.app/
 
+<img width="1907" height="1027" alt="NovaChat" src="https://github.com/user-attachments/assets/29b9b2e9-1d28-4f3f-a14c-14e3f31d2b59" />
+
 ## Features
 
 ### Authentication and Security
 
-* User registration and login
-* JWT-based authentication and authorization
-* Secure password hashing using bcrypt
-* Forgot password functionality
-* Password reset via email
-* User-specific access to conversations
+- User registration and login
+- JWT-based authentication and authorization
+- Secure password hashing using bcrypt
+- Forgot password functionality
+- Password reset via email
+- User-specific access to conversations
+- Protected API routes using authentication middleware
 
 ### AI Chat
 
-* AI-powered conversations using the OpenAI API
-* Creation of new conversations
-* Persistent chat history
-* Automatic conversation titles
-* Markdown rendering for AI responses
-* Syntax highlighting for code responses
+- AI-powered conversations using the OpenAI API
+- Create new conversations
+- Persistent chat history
+- Automatic conversation titles
+- Markdown rendering for AI responses
+- Syntax highlighting for code responses
 
 ### Conversation Management
 
-* View recent conversations
-* Search conversations
-* Rename conversations
-* Delete conversations
-* Export conversations
-* Persistent thread management
-* User-specific conversation history
+- View recent conversations
+- Search conversations
+- Rename conversations
+- Delete conversations
+- Export conversations
+- Persistent thread management
+- User-specific conversation history
 
 ### User Interface
 
-* Responsive chat interface
-* Separate Chat Mode and Interview Mode structure
-* Modern conversational interface
-* Code syntax highlighting
-* Interactive conversation management
+- Responsive chat interface
+- Modern conversational interface
+- Separate Chat Mode and Interview Mode structure
+- Interactive sidebar for conversation management
+- Markdown and code rendering support
 
 Chat Mode is currently functional, while Interview Mode is under development.
 
@@ -50,229 +53,58 @@ Chat Mode is currently functional, while Interview Mode is under development.
 
 ### Frontend
 
-* React
-* Vite
-* JavaScript
-* CSS
-* React Markdown
-* Highlight.js
-* Lucide React
-* UUID
+- React
+- Vite
+- JavaScript
+- CSS
+- React Markdown
+- Highlight.js
+- Lucide React
+- UUID
 
 ### Backend
 
-* Node.js
-* Express.js
-* REST APIs
-* OpenAI API
-* bcrypt
-* JSON Web Token (JWT)
-* Nodemailer
-* dotenv
-* CORS
-* Crypto
+- Node.js
+- Express.js
+- REST APIs
+- OpenAI API
+- bcrypt
+- JSON Web Token (JWT)
+- Nodemailer
+- dotenv
+- CORS
+- Crypto
 
 ### Database
 
-* MongoDB
-* Mongoose
+- MongoDB
+- Mongoose
 
 ### Development and Deployment
 
-* Git
-* GitHub
-* Visual Studio Code
-* Nodemon
-* Vercel
-
-## Architecture
-
-NovaChat follows a client-server architecture consisting of a React frontend, Express backend, OpenAI API integration, and MongoDB database.
-
-```text
-React + Vite Frontend
-        |
-        | REST API
-        v
-Node.js + Express Backend
-        |
-        +-- Authentication
-        +-- Chat API
-        +-- OpenAI API Integration
-        +-- Password Reset
-        |
-        v
-MongoDB + Mongoose
-```
+- Git
+- GitHub
+- Visual Studio Code
+- Nodemon
+- Vercel
 
 ## Authentication
 
-NovaChat uses JWT-based authentication to secure protected resources and ensure that users can access only their own conversations.
+NovaChat uses JWT-based authentication to protect user-specific resources and conversations.
 
-```text
-User
- |
- +-- Registration / Login
- |
- v
-Express Authentication API
- |
- +-- bcrypt Password Hashing
- +-- JWT Authentication
- |
- v
-Authenticated API Requests
- |
- v
-User-specific Threads and Messages
-```
+Passwords are securely hashed using bcrypt before being stored in the database. Protected API routes use authentication middleware to validate requests and associate conversations with the authenticated user.
 
-Password reset functionality uses email-based verification through Nodemailer.
+The application also includes email-based password reset functionality using Nodemailer.
 
-## Chat Flow
+## Chat Functionality
 
-```text
-User Message
-      |
-      v
-React Frontend
-      |
-      v
-Express REST API
-      |
-      v
-OpenAI API
-      |
-      v
-AI Response
-      |
-      +-- Displayed in Chat Interface
-      |
-      +-- Stored in MongoDB
-```
+The frontend communicates with the Express REST API to process user messages. The backend handles the OpenAI API integration and stores conversations and messages in MongoDB using Mongoose.
 
-## Project Structure
+AI responses support Markdown formatting and syntax highlighting for code blocks.
 
-```text
-NovaChat/
-|
-+-- frontend/
-|   +-- src/
-|   |   +-- components/
-|   |       +-- Chat.jsx
-|   |       +-- ChatWindow.jsx
-|   |       +-- Sidebar.jsx
-|   |       +-- Login.jsx
-|   |       +-- Signup.jsx
-|   |       +-- Dashboard.jsx
-|   |       +-- ...
-|   |
-|   +-- package.json
-|
-+-- backend/
-|   +-- routes/
-|   |   +-- auth.js
-|   |   +-- chat.js
-|   |
-|   +-- models/
-|   |   +-- User.js
-|   |   +-- Thread.js
-|   |
-|   +-- middleware/
-|   |   +-- authMiddleware.js
-|   |
-|   +-- server.js
-|   +-- package.json
-|
-+-- README.md
-```
 
-## Local Setup
+## Author
 
-### Clone the Repository
+**Janhavi Singh**
 
-```bash
-git clone <your-github-repository-url>
-cd NovaChat
-```
-
-### Install Frontend Dependencies
-
-```bash
-cd frontend
-npm install
-```
-
-### Install Backend Dependencies
-
-```bash
-cd ../backend
-npm install
-```
-
-### Environment Variables
-
-Create a `.env` file in the backend directory and configure the required environment variables.
-
-```env
-PORT=8080
-MONGODB_URI=your_mongodb_connection_string
-OPENAI_API_KEY=your_openai_api_key
-JWT_SECRET=your_jwt_secret
-EMAIL_USER=your_email
-EMAIL_PASS=your_email_password
-```
-
-### Run the Backend
-
-```bash
-npm run dev
-```
-
-### Run the Frontend
-
-Open a separate terminal:
-
-```bash
-cd frontend
-npm run dev
-```
-
-The frontend will run using Vite, while the Express backend will run on the configured port.
-
-## Future Improvements
-
-* Complete Interview Mode
-* AI-generated interview questions
-* Automated answer evaluation
-* Interview performance scoring
-* Weak-area identification
-* Personalized interview practice sets
-* Additional AI model support
-* Improved application monitoring
-
-## Project Status
-
-NovaChat is an actively developed full-stack application.
-
-### Implemented
-
-* User authentication
-* JWT authorization
-* AI chat functionality
-* Persistent conversations
-* Thread management
-* Conversation search
-* Conversation renaming
-* Conversation deletion
-* Conversation export
-* Password reset
-* Production deployment
-
-### In Development
-
-* Interview Mode
-
-## License
-
-This project is developed for educational and portfolio purposes.
+[GitHub](https://github.com/Janhavi-240307)· [LinkedIn](https://www.linkedin.com/in/janhavisingh2403)
