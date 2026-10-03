@@ -9,6 +9,8 @@ import transporter from "../utils/mailer.js";
 const router = express.Router();
 
 
+// ==================== SIGNUP ====================
+
 router.post("/signup", async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -44,6 +46,8 @@ router.post("/signup", async (req, res) => {
     }
 });
 
+
+// ==================== LOGIN ====================
 
 router.post("/login", async (req, res) => {
     try {
@@ -89,6 +93,8 @@ router.post("/login", async (req, res) => {
 });
 
 
+// ==================== FORGOT PASSWORD ====================
+
 router.post("/forgot-password", async (req, res) => {
     try {
         const { email } = req.body;
@@ -107,31 +113,79 @@ router.post("/forgot-password", async (req, res) => {
             });
         }
 
+        // Generate reset token
         const resetToken = crypto.randomBytes(32).toString("hex");
 
         user.resetToken = resetToken;
 
+        // Token expires after 15 minutes
         user.resetTokenExpiry =
             Date.now() + 15 * 60 * 1000;
 
         await user.save();
 
+        // Create reset password link
         const resetLink =
             `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
 
-        await transporter.sendMail({
-            from: process.env.EMAIL_USER,
-            to: user.email,
+        // Send email using Resend
+        const { data, error } = await transporter.emails.send({
+            from: "NovaChat <onboarding@resend.dev>",
+            to: [user.email],
             subject: "NovaChat Password Reset",
-            text: `Click this link to reset your NovaChat password: ${resetLink}`
+            html: `
+                <h2>NovaChat Password Reset</h2>
+
+                <p>You requested to reset your NovaChat password.</p>
+
+                <p>
+                    Click the button below to reset your password:
+                </p>
+
+                <p>
+                    <a
+                        href="${resetLink}"
+                        style="
+                            display: inline-block;
+                            padding: 10px 20px;
+                            background-color: #171b32;
+                            color: white;
+                            text-decoration: none;
+                            border-radius: 6px;
+                        "
+                    >
+                        Reset Password
+                    </a>
+                </p>
+
+                <p>
+                    This password reset link will expire in 15 minutes.
+                </p>
+
+                <p>
+                    If you did not request a password reset,
+                    you can safely ignore this email.
+                </p>
+            `
         });
+
+        // Resend returned an error
+        if (error) {
+            console.log("Resend error:", error);
+
+            return res.status(500).json({
+                error: "Failed to send password reset email"
+            });
+        }
+
+        console.log("Password reset email sent:", data);
 
         res.json({
             message: "Password reset link sent to your email"
         });
 
     } catch (err) {
-        console.log(err);
+        console.log("Forgot password error:", err);
 
         res.status(500).json({
             error: "Something went wrong"
@@ -139,6 +193,8 @@ router.post("/forgot-password", async (req, res) => {
     }
 });
 
+
+// ==================== RESET PASSWORD ====================
 
 router.post("/reset-password/:token", async (req, res) => {
     try {
@@ -168,6 +224,7 @@ router.post("/reset-password/:token", async (req, res) => {
 
         user.password = hashedPassword;
 
+        // Remove reset token after successful password reset
         user.resetToken = null;
         user.resetTokenExpiry = null;
 
@@ -186,6 +243,8 @@ router.post("/reset-password/:token", async (req, res) => {
     }
 });
 
+
+// ==================== GET CURRENT USER ====================
 
 router.get("/me", authMiddleware, async (req, res) => {
     try {
